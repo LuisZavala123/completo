@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta />
+    <title>
+    </title>
+</head>
+<body>
+    <form id="cont"></form>
+    <script src="js/jquery.js"></script>
+    <script>
+        debugger;
+        if (sessionStorage.getItem("indx") == "1" || sessionStorage.getItem("indx") == "2" || sessionStorage.getItem("indx") == "3") {
+            $('#cont').load("Publico/Mostrar1.aspx");
+        } else if (sessionStorage.getItem("indx") == "4") {
+            $('#cont').load("Usuario/AgregarUsuario.aspx");
+        } else if (sessionStorage.getItem("indx") == "5") {
+            $('#cont').load("Usuario/Reportes.aspx");
+        } else if (sessionStorage.getItem("indx") == "6") {
+            $('#cont').load("Usuario/AgregarProducto.aspx");
+        } else if (sessionStorage.getItem("indx") == "7") {
+            $('#cont').load("Usuario/Ventas.aspx");
+        } else if (sessionStorage.getItem("indx") == "8") {
+            $('#cont').load("Publico/Login.aspx");
+        }else {
+            $('#cont').load("Publico/Principal.aspx");
+        }
+    </script>
+</body>
+</html>

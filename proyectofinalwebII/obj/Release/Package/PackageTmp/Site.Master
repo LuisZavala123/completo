@@ -1,0 +1,69 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="proyectofinalwebII.Site" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta name="viewport" content="width-device-widht">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="css/estilo.css">
+
+    <title>Sistemas</title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+     <form id="frm" runat="server">
+    <nav class="navbar navbar-expand-lg navbar-dark barraN">
+        <a class="navbar-brand" href="../Publico/Principal.aspx">
+            <asp:Image runat="server" src="../img/logo.png" style="width: 15%;"></asp:Image>
+        </a>
+        <asp:Button runat="server" class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" Text="Button"></asp:Button>
+            <div runat="server" class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li runat="server" class="nav-item " id="agUsuario">
+                        <a href="../Usuario/AgregarUsuario.aspx"><img src="../img/iconos/Nusuario.png" class="nav-link btn"></a>
+                    </li>
+                    <li runat="server" class="nav-item " id="Reporte">
+                        <a href="../Usuario/Reportes.aspx"><img src="../img/iconos/Reporte.png" class="nav-link btn"></a>
+                    </li>
+                    <li runat="server" class="nav-item" id="agProducto">
+                        <a href="../Usuario/AgregarProducto.aspx"><img src="../img/iconos/productos.png" class="nav-link btn"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" id="HamBtn"><img src="../img/iconos/hamburguesas.png" class="nav-link btn"></a>
+                    </li>
+                    <li class="nav-item"> 
+                        <a href="#" id="PizBtn"><img src="../img/iconos/pizzas.png" class="nav-link btn"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" id="BebBtn"><img src="../img/iconos/bebidas.png" class="nav-link btn"></a>
+                    </li>
+                    <li runat="server" class="nav-item" id="orden">
+                        <a href="../Usuario/ventas.aspx"><img src="../img/iconos/orden.png" class="nav-link btn"></a>
+                    </li>
+                    <li runat="server" class="nav-item" id="Login">
+                        <a href="../Publico/Login.aspx"><img src="../img/iconos/Login.png" class="nav-link btn"></a>
+                    </li>
+                    <li runat="server" class="nav-item" id="exit">
+                        <a href="#" id="lexit"><img src="../img/iconos/exit.png" class="nav-link btn"></a>
+                    </li>
+                </ul>
+           </div>
+    </nav>
+    
+            <asp:ContentPlaceHolder ID="contenido" runat="server">
+            </asp:ContentPlaceHolder>
+         </form>
+    <script src="../js/jquery.js"></script>
+        <script src="../js/popper.min.js"></script>
+        <script src="../js/bootstrap.js"></script>
+    <script type="text/javascript" src="../Site.min.js"></script>
+    <asp:ContentPlaceHolder ID="Scripts" runat="server">
+            </asp:ContentPlaceHolder> 
+        
+        
+</body>
+</html>
