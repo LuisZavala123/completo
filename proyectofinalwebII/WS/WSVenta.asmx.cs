@@ -57,6 +57,7 @@ namespace proyectofinalwebII.WS
                 {
                     DAO.Agregar_Detalles(new MDetalles(id + "", item.producto, item.Tipo, item.cantidad, item.total));
                 }
+                Session["detalles"] = null;
             }
             }
             

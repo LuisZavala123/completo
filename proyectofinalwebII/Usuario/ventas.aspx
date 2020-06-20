@@ -50,6 +50,6 @@
     </div>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="Scripts" runat="server">
-        <script type="text/javascript" src="Usuario/Ventas.min.js"></script>
+        <script type="text/javascript" src="Usuario/Ventas.js"></script>
     
 </asp:Content>
