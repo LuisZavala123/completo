@@ -3,7 +3,9 @@ var tb;
 
 function recargarDatos(datos) {
     tb.fnClearTable();
-    tb.fnAddData(datos);
+    if (datos.length > 0) {
+        tb.fnAddData(datos);
+    }
 }
 
 function cargarDatos(datos) {
@@ -77,9 +79,9 @@ function eliminar(dato) {
         dataType: 'json',
         type: 'POST',
         success: function (data) {
-
+            debugger;
             recargarDatos(JSON.parse(data.d));
-            con = con - 1;
+            
             console.log(data);
         },
         error: function (err) {
