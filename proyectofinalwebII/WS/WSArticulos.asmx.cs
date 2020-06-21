@@ -29,12 +29,24 @@ namespace proyectofinalwebII.WS
         public void Agregar(string nom, String costo, String Descripcion, String Tipo)
         {
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI")) {
-                String ExpresionNom = @"[A-ZÁÉÍÓÚ][a-z]+";
-                String ExpresionCos = @"[0-9]+[\.][0-9][0-9]?";
-                if (Regex.IsMatch(nom, ExpresionNom) && Regex.IsMatch(costo, ExpresionCos))
+                String ExpresionNom = "^([A-Z]{1}[a-zñáéíóú]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-zñáéíóú]{1,30}[- ]{0,1}|[a-z]{1,2}[ -\']{1}[A-Z]{1}[a-zñáéíóú]{1,30}){1,5}";
+                String ExpresionCos = "^[1-9][0-9]?([.][0-9]{1,2})?";
+                if (Regex.IsMatch(nom, ExpresionNom))
                 {
-                    DAO.Agregar(new MArticulos(Tipo, nom, Double.Parse(costo), "", Descripcion));
+                    if (Regex.IsMatch(costo, ExpresionCos))
+                    {
+                        DAO.Agregar(new MArticulos(Tipo, nom, Double.Parse(costo), "", Descripcion));
+                    }
+                    else
+                    {
+                        throw new SystemException("El precio ingresado no es valido");
+                    }
                 }
+                else
+                {
+                    throw new SystemException("El nombre ingresado no es valido");
+                }
+
             }
         }
 
@@ -42,6 +54,7 @@ namespace proyectofinalwebII.WS
         public List<MArticulos> GetAll()
         {
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI")) {
+                
                 return DAO.GetAll();
             }
             else
@@ -55,7 +68,13 @@ namespace proyectofinalwebII.WS
         public MArticulos Getbyid(String id)
         {
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI")) {
-                return DAO.Getbyid(id);
+                string expid = "^[1-9][0-9]?([.][0-9]{1,2})?";
+                if (Regex.IsMatch(id, expid))
+                {
+                    return DAO.Getbyid(id);
+                }
+                throw new SystemException("El id ingresado no es valido");
+                
             }
             else
             {
@@ -67,7 +86,12 @@ namespace proyectofinalwebII.WS
         public MArticulos GetbyNombre(String Nombre)
         {
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI")) {
-                return DAO.GetbyNombre(Nombre);
+                string expNombre = "^([A-Z]{1}[a-zñáéíóú]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-zñáéíóú]{1,30}[- ]{0,1}|[a-z]{1,2}[ -\']{1}[A-Z]{1}[a-zñáéíóú]{1,30}){1,5}";
+                if (Regex.IsMatch(Nombre, expNombre))
+                {
+                    return DAO.GetbyNombre(Nombre);
+                }
+                throw new SystemException("El Nombre ingresado no es valido");
             }
             else {
                 return null; 
@@ -78,6 +102,7 @@ namespace proyectofinalwebII.WS
         public List<String> GetNombres()
         {
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI")) {
+
                 return DAO.GetNombres();
             }
             else
@@ -91,7 +116,15 @@ namespace proyectofinalwebII.WS
         public void Eliminar(string id)
         {
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI")) {
-                DAO.Eliminar(id);
+                string expid = "^[1-9][0-9]?([.][0-9]{1,2})?";
+                if (Regex.IsMatch(id, expid))
+                {
+                    DAO.Eliminar(id);
+                }
+                else
+                {
+                    throw new SystemException("El id ingresado no es valido");
+                }
             }
             
         }

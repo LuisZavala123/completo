@@ -47,16 +47,15 @@
                 },
                 error: function (err) {
                     $("#mensaje").html('<button type="button" class="close" data-dismiss="alert" >&times;</button>' +
-                        '<strong > a acurrido un error </strong >');
+                        '<strong > '+err+'</strong >');
                     $("#mensaje").show();
-                    console.log(err);
+                    
                 }
             });
         } else {
             $("#mensaje").html('<button type="button" class="close" data-dismiss="alert" >&times;</button>' +
                 '<strong > Los datos son incorrectos  </strong > Correo invalido');
             $("#mensaje").show();
-            console.log("Correo invalido");
         }
     });
 });
