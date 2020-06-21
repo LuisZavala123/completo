@@ -29,14 +29,19 @@ namespace proyectofinalwebII.WS
         [WebMethod(EnableSession = true)]
         public void Agregar(String Total, String Descripcion)
         {
-            if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI") && Session["detalles"] != null ) {
+            if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI") && Session["detalles"] != null)
+            {
+                String expPrecio = "^[1-9][0-9]?([.][0-9]{1,2})?";
+
+                if (Regex.IsMatch(Total, expPrecio)) { 
                 DateTime fecha = DateTime.Today;
                 String fech = fecha.Year + "-";
                 if (fecha.Month.ToString().Length < 2)
                 {
                     fech = fech + "0" + fecha.Month + "-";
                 }
-                else {
+                else
+                {
                     fech = fech + fecha.Month + "-";
                 }
                 if (fecha.Day.ToString().Length < 2)
@@ -47,17 +52,21 @@ namespace proyectofinalwebII.WS
                 {
                     fech = fech + fecha.Day + "";
                 }
-                String Expresion = @"[0-9]+[\.][0-9][0-9]?";
 
-                if (Regex.IsMatch(Total, Expresion)) { }
                 DAO.Agregar(new MVentas(fech, double.Parse(Total), "", Descripcion));
                 int id = DAO.lastid();
-                
+
                 foreach (var item in Session["detalles"] as List<MDetalles>)
                 {
                     DAO.Agregar_Detalles(new MDetalles(id + "", item.producto, item.Tipo, item.cantidad, item.total));
                 }
                 Session["detalles"] = null;
+                }
+                else
+                {
+                    throw new SystemException("El valor total no tiene el formato correcto");
+                }
+                
             }
             }
             
@@ -65,56 +74,61 @@ namespace proyectofinalwebII.WS
         [WebMethod(EnableSession = true)]
         public string detalle(String producto, String Cantidad)
         {
-            try
-            {
+            
                 if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI"))
                 {
-                    ArticuloDAO artdao = new ArticuloDAO();
-                    MArticulos art = artdao.GetbyNombre(producto);
-                    bool si = true;
-                    List<MDetalles> detalles = Session["detalles"] as List<MDetalles>;
-                    if (detalles == null)
+                string expProducto = "^([A-Z]{1}[a-zñáéíóú]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-zñáéíóú]{1,30}[- ]{0,1}|[a-z]{1,2}[ -\']{1}[A-Z]{1}[a-zñáéíóú]{1,30}){1,5}";
+                if (Regex.IsMatch(producto, expProducto))
+                {
+                    string expCantidad = "^[1-9]([0-9]+)?";
+                    if (Regex.IsMatch(Cantidad, expCantidad))
                     {
-                        detalles = new List<MDetalles>();
-                    }
-                    if (detalles.Count < 1)
-                    {
-                        detalles.Add(new MDetalles("", art.id, art.tipo, int.Parse(Cantidad), int.Parse(Cantidad) * art.costo));
-                    }
-                    else
-                    {
-                        foreach (var item in detalles)
-                        {
-                            if (item.producto.Equals(art.id))
-                            {
-                                item.cantidad += int.Parse(Cantidad);
-                                item.total += int.Parse(Cantidad) * art.costo;
 
-                            }
-                            else
-                            {
-                                si = false;
-                            }
+                        ArticuloDAO artdao = new ArticuloDAO();
+                        MArticulos art = artdao.GetbyNombre(producto);
+                        bool si = true;
+                        List<MDetalles> detalles = Session["detalles"] as List<MDetalles>;
+                        if (detalles == null)
+                        {
+                            detalles = new List<MDetalles>();
                         }
-                        if (!si)
+                        if (detalles.Count < 1)
                         {
                             detalles.Add(new MDetalles("", art.id, art.tipo, int.Parse(Cantidad), int.Parse(Cantidad) * art.costo));
                         }
+                        else
+                        {
+                            foreach (var item in detalles)
+                            {
+                                if (item.producto.Equals(art.id))
+                                {
+                                    item.cantidad += int.Parse(Cantidad);
+                                    item.total += int.Parse(Cantidad) * art.costo;
+
+                                }
+                                else
+                                {
+                                    si = false;
+                                }
+                            }
+                            if (!si)
+                            {
+                                detalles.Add(new MDetalles("", art.id, art.tipo, int.Parse(Cantidad), int.Parse(Cantidad) * art.costo));
+                            }
+                        }
+                        Session["detalles"] = detalles;
+                        JavaScriptSerializer jss = new JavaScriptSerializer();
+                        return jss.Serialize(detalles);
                     }
-                    Session["detalles"] = detalles;
-                    JavaScriptSerializer jss = new JavaScriptSerializer();
-                    return jss.Serialize(detalles);
+                    throw new SystemException("La cantidad no tiene el formato correcto");
                 }
+                throw new SystemException("El nombre del producto no tiene el formato correcto");
+            }
                 else
                 {
                     return null;
                 }
-            }
-            catch (Exception)
-            {
-
-                return null;
-            }
+            
             
         }
 
@@ -135,7 +149,12 @@ namespace proyectofinalwebII.WS
         {
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI"))
             {
-                return DAO.GetDetalles(id);
+                string expid = "^[1-9][0-9]?([.][0-9]{1,2})?";
+                if (Regex.IsMatch(id, expid))
+                {
+                    return DAO.GetDetalles(id);
+                }
+                throw new SystemException("El id ingresado no es valido");
             }
             else {
                 return null;
@@ -146,47 +165,57 @@ namespace proyectofinalwebII.WS
         {
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI"))
             {
-                List<MReporte> lista2 = new List<MReporte>();
-                List<MDetalles> lista1 = DAO.GetallDetalles();
-                MReporte rep = new MReporte();
+                string expFecha = @"^\d{4}[\-\/\s]?((((0[13578])|(1[02]))[\-\/\s]?(([0-2][0-9])|(3[01])))|(((0[469])|(11))[\-\/\s]?(([0-2][0-9])|(30)))|(02[\-\/\s]?[0-2][0-9]))$";
+                if (Regex.IsMatch(fecha,expFecha)) {
+                    List<MReporte> lista2 = new List<MReporte>();
+                    List<MDetalles> lista1 = DAO.GetallDetalles();
+                    MReporte rep = new MReporte();
 
-                foreach (var item in DAO.GetAll())
-                {
-                    foreach (var item2 in lista1)
+                    foreach (var item in DAO.GetAll())
                     {
-                        if (item.fecha.Equals(fecha) && item.id.Equals(item2.idVenta))
+                        foreach (var item2 in lista1)
                         {
-                            rep = new MReporte();
-                            rep.Tipo = item2.Tipo;
-                            rep.Cantidad = item2.cantidad;
-                            rep.Total = item2.total;
-                            rep.Nombre = new ArticuloDAO().Getbyid(item2.producto).nombre;
-                            if (lista2.Contains(rep))
+                            if (item.fecha.Equals(fecha) && item.id.Equals(item2.idVenta))
                             {
-                                lista2.ElementAt(lista2.IndexOf(rep)).Total += rep.Total;
-                                lista2.ElementAt(lista2.IndexOf(rep)).Cantidad += rep.Cantidad;
-                            }
-                            else
-                            {
-                                lista2.Add(rep);
-                            }
+                                rep = new MReporte();
+                                rep.Tipo = item2.Tipo;
+                                rep.Cantidad = item2.cantidad;
+                                rep.Total = item2.total;
+                                rep.Nombre = new ArticuloDAO().Getbyid(item2.producto).nombre;
+                                if (lista2.Contains(rep))
+                                {
+                                    lista2.ElementAt(lista2.IndexOf(rep)).Total += rep.Total;
+                                    lista2.ElementAt(lista2.IndexOf(rep)).Cantidad += rep.Cantidad;
+                                }
+                                else
+                                {
+                                    lista2.Add(rep);
+                                }
 
+                            }
                         }
                     }
+                    JavaScriptSerializer jss = new JavaScriptSerializer();
+                    return jss.Serialize(lista2);
                 }
-                JavaScriptSerializer jss = new JavaScriptSerializer();
-                return jss.Serialize(lista2);
+                throw new SystemException("La fecha ingresada no es valida");
             }
             else {
                 return null;
-            }
+            } 
+            
         }
 
         [WebMethod(EnableSession = true)]
         public MVentas Getbyid(String id)
         {
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI")) {
-                return DAO.Getbyid(id);
+                string expid = "^[1-9][0-9]?([.][0-9]{1,2})?";
+                if (Regex.IsMatch(id, expid))
+                {
+                    return DAO.Getbyid(id);
+                }
+                throw new SystemException("El id ingresado no es valido");
             }
             else
             {
@@ -199,7 +228,15 @@ namespace proyectofinalwebII.WS
         {
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI"))
             {
-                DAO.Eliminar(id);
+                string expid = "^[1-9][0-9]?([.][0-9]{1,2})?";
+                if (Regex.IsMatch(id, expid))
+                {
+                    DAO.Eliminar(id);
+                }
+                else
+                {
+                    throw new SystemException("El id ingresado no es valido");
+                }
             }
         }
 
@@ -207,7 +244,15 @@ namespace proyectofinalwebII.WS
         public void EliminarDetalles(string id)
         {
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI")) {
-                DAO.EliminarDetalles(id);
+                string expid = "^[1-9][0-9]?([.][0-9]{1,2})?";
+                if (Regex.IsMatch(id, expid))
+                {
+                    DAO.EliminarDetalles(id);
+                }
+                else
+                {
+                    throw new SystemException("El id ingresado no es valido");
+                }
             }
         }
 
@@ -216,20 +261,27 @@ namespace proyectofinalwebII.WS
         {
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI"))
             {
-                MDetalles temp = new MDetalles(); ;
-                List<MDetalles> detalles = Session["detalles"] as List<MDetalles>;
-                foreach (var item in detalles)
+                string expid = "^[1-9][0-9]?([.][0-9]{1,2})?";
+                if (Regex.IsMatch(id, expid))
                 {
-                    if (item.producto.Equals(id))
+                    MDetalles temp = new MDetalles(); ;
+                    List<MDetalles> detalles = Session["detalles"] as List<MDetalles>;
+                    foreach (var item in detalles)
                     {
-                        temp=item;
+                        if (item.producto.Equals(id))
+                        {
+                            temp = item;
+                        }
                     }
+                    detalles.Remove(temp);
+                    Session["detalles"] = detalles;
+                    JavaScriptSerializer jss = new JavaScriptSerializer();
+                    return jss.Serialize(detalles);
                 }
-                detalles.Remove(temp);
-                Session["detalles"] = detalles;
-                JavaScriptSerializer jss = new JavaScriptSerializer();
-                return jss.Serialize(detalles);
-            }
+                else {
+                    throw new SystemException("El id ingresado no es valido"); 
+                        }
+        }
             else {
                 return null;
             }

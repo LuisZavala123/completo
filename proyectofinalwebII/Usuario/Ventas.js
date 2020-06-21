@@ -79,14 +79,16 @@ function eliminar(dato) {
         dataType: 'json',
         type: 'POST',
         success: function (data) {
-            debugger;
+
             recargarDatos(JSON.parse(data.d));
-            
-            console.log(data);
+
+     
         },
         error: function (err) {
 
-            console.log(err);
+            $("#mensaje").html('<button type="button" class="close" data-dismiss="alert" >&times;</button>' +
+                '<strong > ' + err + ' </strong >');
+            $("#mensaje").show();
         }
     });
 }
@@ -124,10 +126,12 @@ $(document).ready(function nombres(e) {
                 $('#contenido_contenido_CboxProducto').get(0).options[$('#contenido_contenido_CboxProducto').get(0).options.length] = new Option(val);
 
             }
-            console.log(data);
+          
         },
         error: function (err) {
-            console.log(err);
+            $("#mensaje").html('<button type="button" class="close" data-dismiss="alert" >&times;</button>' +
+                '<strong > ' + err + ' </strong >');
+            $("#mensaje").show();
         }
     });
 
@@ -173,9 +177,8 @@ $(document).ready(function () {
                 },
                 error: function (err) {
                     $("#mensaje").html('<button type="button" class="close" data-dismiss="alert" >&times;</button>' +
-                        '<strong > revise los datos </strong >');
+                        '<strong > ' + err + ' </strong >');
                     $("#mensaje").show();
-                    console.log(err);
                 }
             });
         } else {
@@ -220,9 +223,8 @@ $(document).ready(function () {
             },
             error: function (err) {
                 $("#mensaje").html('<button type="button" class="close" data-dismiss="alert" >&times;</button>' +
-                    '<strong > a acurrido un error </strong >');
+                    '<strong > ' + err + ' </strong >');
                 $("#mensaje").show();
-                console.log(err);
             }
         });
     });

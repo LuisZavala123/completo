@@ -28,12 +28,31 @@ namespace proyectofinalwebII.WS
         public void Agregar( string nom, string primer_apellido, string segundo_apellido, string contraseña, string Correo, string Tipo)
         {
             if (Session["Usuario"]!=null&& Session["Usuario"].ToString().Equals("SI")) {
-                String ExpresionNom = @"[A-ZÁÉÍÓÚ][a-z]+";
-                String ExpresionCor = @"[a-zA-Z0-9_\.\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-\.]+";
-                if (Regex.IsMatch(nom, ExpresionNom) && Regex.IsMatch(primer_apellido, ExpresionNom) && Regex.IsMatch(segundo_apellido, ExpresionNom) && Regex.IsMatch(Correo, ExpresionCor)) {
-                    MD5CryptoServiceProvider hashmd5 = new MD5CryptoServiceProvider();
-                    DAO.Agregar(new MUsuarios("", nom, primer_apellido, segundo_apellido, BitConverter.ToString(hashmd5.ComputeHash(UTF8Encoding.UTF8.GetBytes(contraseña))), Correo, Tipo));
-                } 
+                String ExpresionNom = "^([A-Z]{1}[a-zñáéíóú]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-zñáéíóú]{1,30}[- ]{0,1}|[a-z]{1,2}[ -\']{1}[A-Z]{1}[a-zñáéíóú]{1,30}){1,5}";
+                String ExpresionCor = @"^[a-zA-Z0-9_\.\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-\.]+";
+                if (Regex.IsMatch(nom, ExpresionNom))
+                {
+                    if (Regex.IsMatch(primer_apellido, ExpresionNom))
+                    {
+                        if (Regex.IsMatch(Correo, ExpresionCor))
+                        {
+                            MD5CryptoServiceProvider hashmd5 = new MD5CryptoServiceProvider();
+                            DAO.Agregar(new MUsuarios("", nom, primer_apellido, segundo_apellido, BitConverter.ToString(hashmd5.ComputeHash(UTF8Encoding.UTF8.GetBytes(contraseña))), Correo, Tipo));
+                        }
+                        else
+                        {
+                            throw new SystemException("El correo ingresado no es valido");
+                        }
+                    }
+                    else
+                    {
+                        throw new SystemException("El correo apellido no es valido");
+                    }
+                }
+                else
+                {
+                    throw new SystemException("El correo nombre no es valido");
+                }
             }
         }
 
@@ -54,7 +73,12 @@ namespace proyectofinalwebII.WS
         {
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI"))
             {
-                return DAO.Getbyid(id);
+                string expid = "^[1-9][0-9]?([.][0-9]{1,2})?";
+                if (Regex.IsMatch(id, expid))
+                {
+                    return DAO.Getbyid(id);
+                }
+                throw new SystemException("El id ingresado no es valido");
             }
             else {
                 return null;
@@ -66,7 +90,12 @@ namespace proyectofinalwebII.WS
         {
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI"))
             {
-                return DAO.IsUsuario(Nombre);
+                string expNombre = "^([A-Z]{1}[a-zñáéíóú]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-zñáéíóú]{1,30}[- ]{0,1}|[a-z]{1,2}[ -\']{1}[A-Z]{1}[a-zñáéíóú]{1,30}){1,5}";
+                if (Regex.IsMatch(Nombre, expNombre))
+                {
+                    return DAO.IsUsuario(Nombre);
+                }
+                throw new SystemException("El nombre ingresado no es valido");
             }
             else {
                 return false;
@@ -78,7 +107,12 @@ namespace proyectofinalwebII.WS
         {
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI"))
             {
-                return DAO.GetbyCorreo(correo);
+                string expCorreo = @"^[a-zA-Z0-9_\.\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-\.]+";
+                if (Regex.IsMatch(correo, expCorreo))
+                {
+                    return DAO.GetbyCorreo(correo);
+                }
+                throw new SystemException("El correo ingresado no es valido");
             }
             else {
                 return null;
@@ -88,8 +122,8 @@ namespace proyectofinalwebII.WS
         [WebMethod(EnableSession = true)]
         public Boolean Confirmar(String correo, String pw)
         {
-            try
-            {
+            string expCorreo = @"^[a-zA-Z0-9_\.\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-\.]+";
+            if (Regex.IsMatch(correo, expCorreo)) {
                 MD5CryptoServiceProvider hashmd5 = new MD5CryptoServiceProvider();
                 if (DAO.GetbyCorreo(correo).Contraseña.Equals(BitConverter.ToString(hashmd5.ComputeHash(UTF8Encoding.UTF8.GetBytes(pw)))))
                 {
@@ -102,24 +136,25 @@ namespace proyectofinalwebII.WS
                 {
                     return false;
                 }
-
             }
-            catch (Exception)
-            {
+            throw new SystemException("El correo ingresado no es valido");
 
-                return false;
-            }
-            
-            
-            
-            
         }
 
         [WebMethod(EnableSession = true)]
         public void Eliminar(string id)
         {
-            if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI")) {
-                DAO.Eliminar(id);
+            string expid = "^[1-9][0-9]?([.][0-9]{1,2})?";
+            if (Regex.IsMatch(id, expid))
+            {
+                if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI"))
+                {
+                    DAO.Eliminar(id);
+                }
+                else
+                {
+                    throw new SystemException("El id ingresado no es valido");
+                }
             }
         }
 

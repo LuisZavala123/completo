@@ -76,18 +76,16 @@ $('#contenido_contenido_btnGenerar').click(function (e) {
         type: 'POST',
         success: function (data) {
             debugger;
-            console.log(JSON.parse(data.d));
+           
             if (con < 1) {
                 cargarDatos(JSON.parse(data.d));
                 con = con+1;
             } else {
                 recargarDatos(JSON.parse(data.d));
             }
-            
-            
         },
         error: function (err) {
-            console.log(err);
+            
         }
     });
 });

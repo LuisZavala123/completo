@@ -128,13 +128,11 @@ $(document).ready(function () {
                     sessionStorage.setItem("indx", null);
                     sessionStorage.setItem("accion", "Usuario");
                     location.href = "index.html";
-                    console.log(data);
                 },
                 error: function (err) {
                     $("#mensaje").html('<button type="button" class="close" data-dismiss="alert" >&times;</button>' +
-                        '<strong > a acurrido un error </strong >');
+                        '<strong > '+err+' </strong >');
                     $("#mensaje").show();
-                    console.log(err);
                 }
             });
         } else {
@@ -142,7 +140,6 @@ $(document).ready(function () {
             $("#mensaje").html('<button type="button" class="close" data-dismiss="alert" >&times;</button>' +
                 '<strong > Verifique los datos en: </strong >' + mensj);
             $("#mensaje").show();
-            console.log("Verifique los datos");
         }
     });
 });
