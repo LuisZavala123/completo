@@ -94,7 +94,9 @@ namespace proyectofinalwebII.WS
                         }
                         if (detalles.Count < 1)
                         {
+                            
                             detalles.Add(new MDetalles("", art.id, art.tipo, int.Parse(Cantidad), int.Parse(Cantidad) * art.costo));
+                                     
                         }
                         else
                         {
@@ -149,7 +151,7 @@ namespace proyectofinalwebII.WS
         {
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI"))
             {
-                string expid = "^[1-9][0-9]?([.][0-9]{1,2})?";
+                string expid = "^[1-9][0-9]*";
                 if (Regex.IsMatch(id, expid))
                 {
                     return DAO.GetDetalles(id);
@@ -210,7 +212,7 @@ namespace proyectofinalwebII.WS
         public MVentas Getbyid(String id)
         {
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI")) {
-                string expid = "^[1-9][0-9]?([.][0-9]{1,2})?";
+                string expid = "^[1-9][0-9]*";
                 if (Regex.IsMatch(id, expid))
                 {
                     return DAO.Getbyid(id);
@@ -228,7 +230,7 @@ namespace proyectofinalwebII.WS
         {
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI"))
             {
-                string expid = "^[1-9][0-9]?([.][0-9]{1,2})?";
+                string expid = "^[1-9][0-9]*";
                 if (Regex.IsMatch(id, expid))
                 {
                     DAO.Eliminar(id);
@@ -244,7 +246,7 @@ namespace proyectofinalwebII.WS
         public void EliminarDetalles(string id)
         {
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI")) {
-                string expid = "^[1-9][0-9]?([.][0-9]{1,2})?";
+                string expid = "^[1-9][0-9]*";
                 if (Regex.IsMatch(id, expid))
                 {
                     DAO.EliminarDetalles(id);
@@ -261,7 +263,7 @@ namespace proyectofinalwebII.WS
         {
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI"))
             {
-                string expid = "^[1-9][0-9]?([.][0-9]{1,2})?";
+                string expid = "^[1-9][0-9]*";
                 if (Regex.IsMatch(id, expid))
                 {
                     MDetalles temp = new MDetalles(); ;

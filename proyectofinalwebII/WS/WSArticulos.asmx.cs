@@ -31,11 +31,19 @@ namespace proyectofinalwebII.WS
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI")) {
                 String ExpresionNom = "^([A-Z]{1}[a-zñáéíóú]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-zñáéíóú]{1,30}[- ]{0,1}|[a-z]{1,2}[ -\']{1}[A-Z]{1}[a-zñáéíóú]{1,30}){1,5}";
                 String ExpresionCos = "^[1-9][0-9]?([.][0-9]{1,2})?";
+                String ExpresionTip = "^([H][a][m][b][u][r][g][u][e][s][a]|[B][e][b][i][d][a]|[P][i][z][z][a]){1}";
                 if (Regex.IsMatch(nom, ExpresionNom))
                 {
                     if (Regex.IsMatch(costo, ExpresionCos))
                     {
-                        DAO.Agregar(new MArticulos(Tipo, nom, Double.Parse(costo), "", Descripcion));
+                        if (Regex.IsMatch(Tipo,ExpresionTip))
+                        {
+                            DAO.Agregar(new MArticulos(Tipo, nom, Double.Parse(costo), "", Descripcion));
+                        }
+                        else
+                        {
+                            throw new SystemException("El tipo ingresado no es valido");
+                        }
                     }
                     else
                     {
@@ -68,7 +76,7 @@ namespace proyectofinalwebII.WS
         public MArticulos Getbyid(String id)
         {
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI")) {
-                string expid = "^[1-9][0-9]?([.][0-9]{1,2})?";
+                string expid = "^[1-9][0-9]*";
                 if (Regex.IsMatch(id, expid))
                 {
                     return DAO.Getbyid(id);
@@ -116,7 +124,7 @@ namespace proyectofinalwebII.WS
         public void Eliminar(string id)
         {
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI")) {
-                string expid = "^[1-9][0-9]?([.][0-9]{1,2})?";
+                string expid = "^[1-9][0-9]*";
                 if (Regex.IsMatch(id, expid))
                 {
                     DAO.Eliminar(id);
