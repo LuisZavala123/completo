@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\cuyoc\\Desktop\\completo\\BackEnd\\BackEnd.csproj": {}
+    "D:\\Repos\\completo\\BackEnd\\BackEnd.csproj": {}
   },
   "projects": {
-    "C:\\Users\\cuyoc\\Desktop\\completo\\BackEnd\\BackEnd.csproj": {
+    "D:\\Repos\\completo\\BackEnd\\BackEnd.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\cuyoc\\Desktop\\completo\\BackEnd\\BackEnd.csproj",
+        "projectUniqueName": "D:\\Repos\\completo\\BackEnd\\BackEnd.csproj",
         "projectName": "BackEnd",
-        "projectPath": "C:\\Users\\cuyoc\\Desktop\\completo\\BackEnd\\BackEnd.csproj",
-        "packagesPath": "C:\\Users\\cuyoc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\cuyoc\\Desktop\\completo\\BackEnd\\obj\\",
+        "projectPath": "D:\\Repos\\completo\\BackEnd\\BackEnd.csproj",
+        "packagesPath": "C:\\Users\\GERA\\.nuget\\packages\\",
+        "outputPath": "D:\\Repos\\completo\\BackEnd\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\cuyoc\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\GERA\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -59,7 +59,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.202\\RuntimeIdentifierGraph.json"
         }
       }
     }
