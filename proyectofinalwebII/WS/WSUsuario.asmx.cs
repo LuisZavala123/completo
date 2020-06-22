@@ -46,12 +46,12 @@ namespace proyectofinalwebII.WS
                     }
                     else
                     {
-                        throw new SystemException("El correo apellido no es valido");
+                        throw new SystemException("El apellido no es valido");
                     }
                 }
                 else
                 {
-                    throw new SystemException("El correo nombre no es valido");
+                    throw new SystemException("El nombre no es valido");
                 }
             }
         }
@@ -73,7 +73,7 @@ namespace proyectofinalwebII.WS
         {
             if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI"))
             {
-                string expid = "^[1-9][0-9]?([.][0-9]{1,2})?";
+                string expid = "^[1-9][0-9]*";
                 if (Regex.IsMatch(id, expid))
                 {
                     return DAO.Getbyid(id);
@@ -144,7 +144,7 @@ namespace proyectofinalwebII.WS
         [WebMethod(EnableSession = true)]
         public void Eliminar(string id)
         {
-            string expid = "^[1-9][0-9]?([.][0-9]{1,2})?";
+            string expid = "^[1-9][0-9]*";
             if (Regex.IsMatch(id, expid))
             {
                 if (Session["Usuario"] != null && Session["Usuario"].ToString().Equals("SI"))
